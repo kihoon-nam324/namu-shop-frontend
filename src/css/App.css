@@ -2,8 +2,23 @@
   text-align: center;
 }
 
+.me-auto {
+  margin-right:90%;
+}
+.background {
+  background-image: url('./../img/background.jpg');
+  background-size: cover;
+  color: white;
+  min-height: 40vh;
+  margin-bottom: 5vh;
+}
+
+.background h1 {
+  padding: 10vh;
+}
+
 .App-logo {
-  height: 40vmin;
+  width: 40vmin;
   pointer-events: none;
 }
 
