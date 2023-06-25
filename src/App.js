@@ -11,6 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import { useQuery } from "react-query"
+//import { css } from '@emotion/core';
+//import { DotLoader } from 'react-spinners';
 
 
 
@@ -40,6 +42,13 @@ function App() {
     }),
     { staleTime : 2000 }
   )
+
+  // const override = css`
+  //   display: block;
+  //   margin: 0 auto;
+  //   border-color: red;
+  // `;
+
 
   useMemo(()=>{
     if(localStorage.getItem('watched') === undefined || localStorage.getItem('watched') === null ){
@@ -122,6 +131,8 @@ function App() {
                   <div className="row">
                     {
                       로딩 === true ? <div><h4>Loading...</h4></div> :
+                      //로딩 === true ? <DotLoader css={override} size={150} color={'#123abc'} loading={로딩} /> :
+                      
                       products.map((a, i) => {
                         return <Card products={products[i]} i={i} key={i}/>
                       })
@@ -161,9 +172,7 @@ function App() {
               <Detail products={products}/>
             </>
           }/>
-            
           
-
           <Route path="/cart" element={
             <Cart />
           }/>
@@ -172,6 +181,7 @@ function App() {
             <div>Page Not Found</div>
           }/>
         </Routes>
+        {/* <DotLoader css={override} size={150} color={'#123abc'} loading={로딩} /> */}
       </Suspense>
     </div>
   );
@@ -203,8 +213,8 @@ function Card(props) {
       // <div className="col-md-4" onClick={() => { history.push('/detail/'+ props.products.no) }}>
       <div className="col-md-4" onClick={() => { navigate('/detail/'+ props.products.no) }}>
         <img src={ props.products.productImageUrl } width="50%" height="50%" />
-        <h4>{ props.products.name }</h4>
-        <p> Price : { props.products.listPrice} Won<br/> Stock : { props.products.qty} </p>
+        <h4>{props.products.no}.{ props.products.name }</h4>
+        <p> Price : ¥{ props.products.listPrice} <br/> Stock : { props.products.qty} </p>
       </div>
   )
 }

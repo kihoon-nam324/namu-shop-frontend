@@ -23,20 +23,13 @@ function Detail(props) {
     let [누른탭, 누른탭변경] = useState(0);
     let [스위치, 스위치변경] = useState(false);
     let [주문수량, 주문수량변경] = useState(0);
-    
-    //let [fade2, setFade2] = useState('');
+
     let { no } = useParams();
-    //let history = useHistory();
     let navigate = useNavigate();
-
     let 찾은상품 = props.products.find(x => x.no === parseInt(no));
-
-
     let dispatch = useDispatch();
 
     useEffect(() => {
-        // 그  페이지에 보는 상품 id를 가져와서
-        // localStorage에 watched 항목에 추가
         let 꺼낸거 = localStorage.getItem('watched')
         꺼낸거 = JSON.parse(꺼낸거)
         꺼낸거.push(찾은상품.no);
@@ -48,11 +41,6 @@ function Detail(props) {
     useEffect(() => {
         // 2초 후에 alert 창을 안보이게 하기
         let timer = setTimeout(() => {alert변경(false)},5000);
-        // setFade2('end')
-        // return () =>{ 
-        //     setFade2('');
-        //     clearTimeout(timer) 
-        // };
 
     },[alert]);
 
@@ -76,32 +64,36 @@ function Detail(props) {
                 </div>
                 <div className="col-md-6">
                     <h4 className="pt-5">{찾은상품.name}</h4>
-                    <p>{찾은상품.listPrice} Won</p>
+                    <p>Stock : {찾은상품.qty}</p>
+                    <p>Price : ¥{찾은상품.listPrice}</p>
                     <p>Order Quantity : <input onChange={(e) => {주문수량변경(e.target.value)}} value={주문수량}/></p>
                     <button className="btn btn-danger" onClick={() => {                             
-                            if(주문수량 === 0){
-                                alert메세지변경('주문수량을 입력해주세요.');
+                            if(parseInt(주문수량) === 0){
+                                alert메세지변경('Please enter the order quantity.');
+                                alert변경(true);
+                                return;
+                            }
+                            if(주문수량 > 찾은상품.qty){
+                                alert메세지변경('The order quantity exceeds the stock quantity.');
                                 alert변경(true);
                                 return;
                             }
 
-                            dispatch(addItem( {no : 찾은상품.no, productImageUrl: 찾은상품.productImageUrl, name: 찾은상품.name, count: parseInt(주문수량), price: 찾은상품.listPrice } ));
-                            //history.push('/cart')
+                            dispatch(addItem( {no : 찾은상품.no, productImageUrl: 찾은상품.productImageUrl, name: 찾은상품.name, count: parseInt(주문수량), price: (parseInt(찾은상품.listPrice)* parseInt(주문수량)), unitPrice: parseInt(찾은상품.listPrice), stock: parseInt(찾은상품.qty) }));
                             navigate('/cart');
                         }}>Add Cart</button>
                     &nbsp;
                     <button className="btn btn-danger" onClick={() => {
-                        //history.push('/')
                         navigate('/');
                     }}>Back</button>
                 </div>
             </div>
             <Nav className="mt-5" variant="tabs" defaultActiveKey="/link-0">
                 <Nav.Item>
-                    <Nav.Link eventKey="link-0" onClick={() => {스위치변경(false); 누른탭변경(0)}}>상품설명</Nav.Link>
+                    <Nav.Link eventKey="link-0" onClick={() => {스위치변경(false); 누른탭변경(0)}}>Product Description</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="link-1" onClick={() => {스위치변경(false); 누른탭변경(1)}}>배송정보</Nav.Link>
+                    <Nav.Link eventKey="link-1" onClick={() => {스위치변경(false); 누른탭변경(1)}}>Shipping Information</Nav.Link>
                 </Nav.Item>
             </Nav>
             <CSSTransition in={스위치} classNames="wow" timeout={500}>
@@ -112,9 +104,6 @@ function Detail(props) {
 }
 
 function TabContent(props){
-
-    //et [fade, setFade] = useState('')
-
     useEffect(() => {
         props.스위치변경(true);
     })

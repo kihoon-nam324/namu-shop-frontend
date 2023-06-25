@@ -2,3 +2,27 @@
     text-align: center;
     vertical-align: middle;
 }
+
+.cart-background {
+    width: 100%;
+    background-color: #c2d3de;
+    padding: 30px;
+}
+
+.cart-table {
+    width: 100%;
+    max-width: 700px;
+    /* margin: auto; */
+    background: white;
+    border-radius: 10px;
+}
+
+.main-btn {
+    padding: 15px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(95, 80, 255);
+    color: white;
+    cursor: pointer;
+}

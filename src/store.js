@@ -8,13 +8,20 @@ let cart = createSlice({
     ],
     reducers : {
         addCount(state, action){
-            let no = state.findIndex((a) => { return a.no === action.payload })
-            state[no].count++
+            //let no = state.findIndex((a) => { return a.no === action.payload })
+            let no = state.findIndex((a) => { return a.no === action.payload.no })
+
+            if(state[no].stock > action.payload.count){
+                state[no].count++
+                state[no].price = calculatePrice(state[no].count, state[no].unitPrice) 
+            }
         },
         addItem(state, action){
             let no = state.findIndex((a) => { return a.no === action.payload.no })
             if(state[no]) {
-                state[no].count = parseInt(state[no].count) + parseInt(action.payload.count);
+                //state[no].count = parseInt(state[no].count) + parseInt(action.payload.count);
+                state[no].count = state[no].count + action.payload.count;
+                state[no].price = calculatePrice(state[no].count, state[no].unitPrice)
             } else {
                 state.push(action.payload);
             }
@@ -30,12 +37,21 @@ let cart = createSlice({
             let no = state.findIndex((a) => { return a.no === action.payload })
             if(state[no].count > 1){
                 state[no].count--;
+                state[no].price = calculatePrice(state[no].count, state[no].unitPrice) 
             }
         },
+        clearState(state){
+            return [];
+        }
     }
 }) 
 
-export let { addCount, addItem, removeItem, subtractCount } = cart.actions
+
+function calculatePrice(count, unitPrice) {
+    return count * unitPrice;
+}
+
+export let { addCount, addItem, removeItem, subtractCount, clearState } = cart.actions
 
 export default configureStore({
     reducer: {
